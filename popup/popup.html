@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Image Scraper</title>
+  <link rel="stylesheet" href="popup.css?v=2.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Load JSZip with error handling -->
+  <script>
+    // Add error handling for JSZip loading
+    window.addEventListener('error', function(e) {
+      if (e.filename && e.filename.includes('jszip.min.js')) {
+        console.error('Error loading JSZip:', e.message);
+        // Create a visible error message for debugging
+        if (!document.getElementById('jszip-error')) {
+          document.addEventListener('DOMContentLoaded', function() {
+            const toast = document.createElement('div');
+            toast.id = 'jszip-error';
+            toast.style.position = 'fixed';
+            toast.style.bottom = '16px';
+            toast.style.left = '16px';
+            toast.style.right = '16px';
+            toast.style.padding = '16px';
+            toast.style.backgroundColor = '#fee2e2';
+            toast.style.color = '#dc2626';
+            toast.style.borderRadius = '8px';
+            toast.style.zIndex = '9999';
+            toast.textContent = 'Failed to load JSZip library. Bulk download functionality will be limited.';
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 5000);
+          });
+        }
+      }
+    }, true);
+  </script>
+  
+  <!-- Load JSZip from both local and CDN for redundancy -->
+  <script src="../lib/jszip.min.js"></script>
+  <!-- Fallback to CDN if local file fails -->
+  <script>
+    if (typeof JSZip === 'undefined') {
+      console.log('Local JSZip not found, loading from CDN');
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      document.head.appendChild(script);
+    }
+  </script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="app-title">
+        <h1>Image Scraper Pro</h1>
+        <div class="status-badge" id="status">Ready</div>
+      </div>
+      <div class="theme-toggle">
+        <label class="switch" title="Toggle dark mode">
+          <input type="checkbox" id="themeToggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </header>
+
+    <main class="app-content">
+      <div class="actions-grid">
+        <button id="selectElement" class="btn btn-primary">
+          <i class="ri-cursor-line btn-icon"></i>
+          <span class="btn-text">Select Element</span>
+        </button>
+        
+        <button id="scrapeImages" class="btn btn-success" disabled>
+          <i class="ri-image-line btn-icon"></i>
+          <span class="btn-text">Scrape Images</span>
+        </button>
+        
+        <button id="captureScreenshot" class="btn btn-warning" disabled>
+          <i class="ri-camera-lens-line btn-icon"></i>
+          <span class="btn-text">Take Screenshot</span>
+        </button>
+        
+        <button id="cancelAction" class="btn btn-danger" disabled>
+          <i class="ri-close-line btn-icon"></i>
+          <span class="btn-text">Cancel</span>
+        </button>
+      </div>
+
+      <div id="results-container">
+
+      </div>
+
+      <button id="downloadAll" class="btn btn-primary bulk-download" disabled>
+        <i class="ri-download-cloud-2-line btn-icon"></i>
+        Download All Images
+      </button>
+    </main>
+    
+    <footer class="app-footer">
+      <div class="app-info">
+        <span>v2.0</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js?v=2.0"></script>
+</body>
+</html> 
